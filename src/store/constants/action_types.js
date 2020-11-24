@@ -1,0 +1,3 @@
+export const ADD_EVENTO = "ADD_EVENTO"
+export const REMOVE_EVENTO = "REMOVE_EVENTO"
+export const MODIFY_EVENTO = "MODIFY_EVENTO"

@@ -1,7 +1,23 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
-import ListGroup from 'react-bootstrap/ListGroup'
+import {connect}  from 'react-redux'
+import {addEvento} from '../store/actions'
+
+
+const mapStateToProps = state => {
+    return{
+        eventos: state.eventos,
+        idEvento: state.idEventos
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return{
+        addEvento : evento => dispatch(addEvento(evento))
+    }
+}
+
 
 class Formulario extends React.Component{
 
@@ -11,52 +27,82 @@ class Formulario extends React.Component{
         super()
         console.log('Constuctor')
 
-        this.state = {
-            mailDefault : "algo@algo.com",
-            title: 'empieza'
+        this.idEvento = React.createRef()
+        this.categoriaEvento = React.createRef()
+        this.nombreEvento = React.createRef()
+        this.fechaEvento = React.createRef()
 
-        }
-
-        this.textoToListGruop = this.textoToListGruop.bind(this)
+        this.agregarEvento = this.agregarEvento.bind(this)
     }
 
-    textoToListGruop(args){
+    agregarEvento(event) {
+        console.log('Disparo el AGREGAR EVENTO' + event)
+        this.props.addEvento({
+            id: this.idEvento.current.value,
+            categoria: this.categoriaEvento.current.value,
+            nombre: this.nombreEvento.current.value,
+            fecha: this.fechaEvento.current.value
 
-        this.setState({
-            title : args.target.value
         })
     }
 
     render(){
 
-        let form =  
-        <div> 
-            <ListGroup horizontal>
-                <ListGroup.Item variant= "primary">{this.state.title}</ListGroup.Item> 
-            </ListGroup>         
-            <Form>
-            <Form.Group controlId="formBasicEmail">
-            <Form.Label>Escribí algo</Form.Label>
-            <Form.Control type="text" placeholder="Un texto va acá" defaultValue={this.state.mailDefault} onChange={this.textoToListGruop} />
-            <Form.Text className="text-muted">
-                We'll never share your email with anyone else.
-            </Form.Text>
+        return(
+        <div class="container"> 
+       
+            {/* <Form>
+            <Form.Group controlId={this.idEvento} ref={this.idEvento}>
+            <Form.Label>ID</Form.Label>
+            <Form.Control type="text" placeholder="Ingresar ID">
+
+                </Form.Control>
+
+            </Form.Group>
+
+            <Form.Group controlId={this.categoriaEvento} ref={this.categoriaEvento}>
+            <Form.Label>Categoria Anuncio</Form.Label>
+            <Form.Control as="select" placeholder="¿Qué tipo de anuncio querés dejar?">
+                    <option>Una opción</option>
+                    <option>Otra opción</option>
+                </Form.Control>
+
+            </Form.Group>
+
+            <Form.Group controlId={this.nombreEvento} ref={this.nombreEvento}>
+            <Form.Label>Descripción</Form.Label>
+            <Form.Control type="text" placeholder="Colocá acá una descripción" />
+
+            </Form.Group>
+
+            <Form.Group controlId="fecha" ref={this.fechaEvento}>
+            <Form.Label>Fecha</Form.Label>
+            <Form.Control type="date" placeholder="¿Cuándo va a ocurrir el evento?"/>
+
             </Form.Group>
             
-            <Form.Group controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control type="password" placeholder="Password" />
-            </Form.Group>
-            <Form.Group controlId="formBasicCheckbox">
-            <Form.Check type="checkbox" label="Check me out" />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-            Submit
+
+            <Button variant="primary" id="agregarEvento"  onClick={this.agregarEvento}>
+            Guardar
             </Button>
-            </Form>
+            </Form> */}
+
+
+            <h3>Agregar Evento</h3>
+
+            <label for="id">ID</label>
+            <input   type="text" ref={this.idEvento} value={this.props.idEvento} /> <br/>
+            <label for="descripcion">Descripción</label>
+            <input type="text" id="descripcion" ref={this.nombreEvento} /> <br/>
+            <label for="categoria">Categoria</label>
+            <select id="categoria" ref={this.categoriaEvento}><option value="1">Reunión Escolar</option><option value="2">Visita Médico</option></select>
+            <br/>
+            <label for="fecha">Fecha Evento</label>
+            <input type="date" id="fecha" ref ={this.fechaEvento} /> <br/>
+            <button id="agregarEvento" onClick={this.agregarEvento}>Agregar Evento</button>
         </div>
         
-        return form
+        )
 
 
         
@@ -64,5 +110,7 @@ class Formulario extends React.Component{
 
 }
 
+const form = connect(mapStateToProps, mapDispatchToProps)(Formulario)
 
-export default Formulario
+
+export default form
